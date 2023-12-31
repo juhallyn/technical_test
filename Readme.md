@@ -1,9 +1,8 @@
 # Documentation du Projet
 
-Ce document fournit des instructions pour lancer le projet.
-
 ## Structure du Projet
 
+```
 ├── Dockerfile
 ├── Pipfile
 ├── Pipfile.lock
@@ -25,7 +24,7 @@ Ce document fournit des instructions pour lancer le projet.
 └── tests
     ├── init.py
     └── test_main.py
-
+```
   
 ## Prérequis
 
@@ -33,21 +32,16 @@ Ce document fournit des instructions pour lancer le projet.
 
 - [Docker Compose](https://docs.docker.com/compose/)
 
-- [Python](https://www.python.org/) (pour utiliser Pipenv)
-
-  
 
 ## Instructions pour lancer le Projet
-
-  
 
 1.  **Cloner le Projet**
 
  ```bash
 
-git clone <url_du_projet.git>
+git clone https://github.com/juhallyn/technical_test
 
-cd <nom_du_projet>
+cd technical_test
 ```
 2. **Configurer les Variables d'Environnement**
 
@@ -64,28 +58,27 @@ POSTGRES_DB=rpn
 ```
 3.  **Lancer les Conteneurs Docker**
 
-  Utilisez Docker Compose pour construire et lancer les conteneurs.
-
-(pour récuperer le shell ajouter l'option `-d`)
-
+  Utilisez Docker Compose pour construire et lancer les conteneurs (pour récuperer le shell ajouter l'option `-d`).
 ```bash
 docker-compose up
 ```
-4.  **Accéder au Shell Pipenv**
-Accédez au shell Pipenv dans le conteneur.
+
+4.  **Accéder au Shell Pipenv dans le conteneur***
 ```bash
-docker-compose  exec  app  pipenv  shell
+docker-compose exec app bash 
+ - pipenv shell
 ```
+
 5. Installer les Dépendances Python
 Dans le shell Pipenv, utilisez la commande suivante pour installer les dépendances Python spécifiées dans le fichier Pipfile :
-
-```pipenv install```
-  
+```bash
+pipenv install
+```
 
 6. **Appliquer les Migrations**
 Dans le shell Pipenv, utilisez la commande suivante pour appliquer les migrations de base de données avec Alembic :
 ```bash
-alembic  upgrade  head
+alembic upgrade head
 ```
 
 6.  **Redémarrer les Conteneurs Docker**
@@ -113,7 +106,7 @@ L'application sera accessible à l'adresse http://127.0.0.1:8000.
 -  **Exemple :**
 
 ```bash
-curl  -X  POST  -H  "Content-Type: application/json"  -d  '{"expr": "2 2 * 3 + 1.2 +"}'  http://localhost:8000/eval_rpn/
+curl -X POST -H "Content-Type: application/json" -d '{"expr": "2 2 * 3 + 1.2 +"}' http://localhost:8000/eval_rpn/
 ```
 ## 2. Exporter les Données en CSV
 
@@ -124,13 +117,13 @@ curl  -X  POST  -H  "Content-Type: application/json"  -d  '{"expr": "2 2 * 3 + 1
 -  **Exemple :**
 
 ```bash
-curl  http://localhost:8000/export_csv/  >  export.csv
+curl http://localhost:8000/export_csv/ > export.csv
 ```
 ------------------------------------------------------------------------------------------------------
 # Tests unitaires 
 Exécutez les tests unitaires :
 ```bash
-docker-compose  exec  app  python  -m  unittest  discover  -s  tests
+docker-compose exec app python -m unittest discover -s tests
 ```
 ------------------------------------------------------------------------------------------------------
 

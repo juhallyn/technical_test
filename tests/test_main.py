@@ -1,8 +1,7 @@
 import unittest
 from fastapi.testclient import TestClient
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from main import app
-from sqlalchemy.orm import Session
 from models import CalculationResult
 from datetime import datetime
 from sqlalchemy import create_engine
@@ -78,19 +77,6 @@ class TestApp(unittest.TestCase):
         self.assertEqual(data_db[0].expression, expr)
         self.assertEqual(data_db[0].result, -40.8)
 
-    # @patch("main.get_db", side_effect=override_get_db)
-    # def test_eval_rpn_division_by_zero(self, mock_get_db):
-    #     expr = "4 0 /"
-
-    #     response = self.client.post("/eval_rpn/", json={"expr": expr})
-
-    #     self.assertEqual(response.status_code, 400)
-    #     error_result = response.json()
-    #     self.assertIn("detail", error_result)
-    #     self.assertEqual(
-    #         error_result["detail"], "Error: Division by zero is not allowed."
-    #     )
-
     @patch("config.database.SessionLocal", side_effect=override_get_db)
     def test_eval_rpn_division_by_zero(self, mock_get_db):
         expr = "4 0 /"
@@ -150,9 +136,7 @@ class TestApp(unittest.TestCase):
 
     @patch("config.database.SessionLocal", side_effect=override_get_db)
     @patch("sqlalchemy.sql.functions.now")
-    def test_export_csv_with_data(
-        self, mock_sqlalchemy_now, mock_get_db
-    ):
+    def test_export_csv_with_data(self, mock_sqlalchemy_now, mock_get_db):
         mock_sqlalchemy_now.return_value = datetime(2023, 1, 1, 12, 0, 0)
 
         data_to_add = [
@@ -168,9 +152,6 @@ class TestApp(unittest.TestCase):
         response_export_csv = self.client.get("/export_csv/")
         self.assertEqual(response_export_csv.status_code, 200)
 
-        # Additional assertions specific to this test, if needed
-
-        # Verify that CalculationResult records for the added data exist in the database
         expected_data_db = [
             {"expr": "2 2 +", "result": 4},
             {"expr": "5 3 -", "result": 2},
@@ -180,8 +161,12 @@ class TestApp(unittest.TestCase):
         data_db = (
             self.db.query(CalculationResult)
             .filter(
-                CalculationResult.expression.in_([data["expr"] for data in expected_data_db]),
-                CalculationResult.result.in_([data["result"] for data in expected_data_db]),
+                CalculationResult.expression.in_(
+                    [data["expr"] for data in expected_data_db]
+                ),
+                CalculationResult.result.in_(
+                    [data["result"] for data in expected_data_db]
+                ),
             )
             .all()
         )
