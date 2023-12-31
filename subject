@@ -1,0 +1,11 @@
+Exercice 1 : ✅
+Créer un algo qui réalise une calculatrice en notation polonaise inverse (NPI), le tout en Python.
+Développer une API REST avec une bibliothèque web python Fast API. Cette api permettra d’envoyer les opérations à réaliser et retournera le résultat.
+Enregistrer sur une base de données les opérations et les résultats.
+Faire une route API qui permet de récupérer dans un fichier Csv les datas.
+Déployer le projet sur docker à l’aide de docker-compose.
+
+Exercice Plus : 
+Documentation ✅
+Unitest ✅
+Frontend pour la calculatrice en React ❌
